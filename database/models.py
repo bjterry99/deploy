@@ -114,7 +114,7 @@ class grocery(models.Model) :
 
 class shopping(models.Model) :
     shopping_id = models.AutoField(primary_key=True)
-    itemname = models.CharField(max_length=20, default="default", verbose_name="Item Name")
+    itemname = models.CharField(max_length=100, default="default", verbose_name="Item Name")
     quantity = models.CharField(max_length=20, blank=True)
 
     class Meta:
