@@ -26,6 +26,33 @@ def indexPageView(request) :
         "menu" : list
     }
 
+    # return render(request, 'database/index.html', context)
+    return redirect('../home')
+
+def homePageView(request) :
+    ingredient_data = ingredients.objects.all()
+    menu_data = menu.objects.all()
+
+    mainq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 1 order by r.recipename"
+    sideq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 4 order by r.recipename"
+    dessertq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 5 order by r.recipename"
+
+    main_data = recipes.objects.raw(mainq)
+    side_data = recipes.objects.raw(sideq)
+    dessert_data = recipes.objects.raw(dessertq)
+
+    list = []
+    for recipe in menu_data :
+        list.append(recipe.recipeid)
+
+    context = {
+        "main" : main_data,
+        "side" : side_data,
+        "dessert" : dessert_data,
+        "ingredients" : ingredient_data,
+        "menu" : list
+    }
+
     return render(request, 'database/index.html', context)
     # return redirect('/index')
 
