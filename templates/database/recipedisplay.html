@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titleblock %}Recipe: {{ recipe.recipename }}{% endblock %}
+{% block mainblock %}
+
+<!-- Header-->
+<header class="py-5">
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
+            <div class="m-4 m-lg-5">
+
+                <h1 class="display-5 fw-bold">{{ recipe.recipename }}</h1>
+                <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+
+                <br>
+                <br>
+
+                <div class="row">
+                    <div class="col">
+                        <h3 class="display-10 fw-bold">Ingredients</h3>
+
+                        {% for i in ingredients %}
+                            <div class="row">
+                                <div class="col">
+                                    <p class="text-right">{{ i.iname }}</p>
+                                </div>
+
+                                <div class="col">
+                                    <p class="text-left">{{ i.measurement }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-right fw-bold">Time to prepare:</p>
+                            </div>
+                            <div class="col">
+                                {% for t in time %}
+                                    <p class="text-left">{{ t.length }} {{ t.attribute }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <p class="text-right fw-bold">Tools needed:</p>
+                            </div>
+                            <div class="col">
+                                {% for t in tools %}
+                                    <p class="text-left">{{ t.toolname }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h3 class="display-10 fw-bold">Instructions</h3>
+                        
+                        <p class="text-left">{{ recipe.instructions|safe }}</p>
+                    </div>
+                </div>
+
+                {% if recipe in menu %}
+                    <a class="btn btn-danger btn-lg"  href="{% url 'menuitemdeleterecipe' recipeID=recipe.recipe_id %}" >Remove from Menu</a>
+                {% endif %}
+                {% if  recipe not in menu %}
+                    <a class="btn btn-primary btn-lg"  href="{% url 'menuitemaddrecipe' recipeID=recipe.recipe_id %}" >Add to Menu</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</header>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titleblock %}Grocery List{% endblock %}
+{% block mainblock %}
+
+<!-- Header-->
+<header class="py-5">
+    <div class="container pb-0 px-lg-5">
+        <div class="p-4 p-lg-1 bg-light pb-0 rounded-3 text-center">
+            <div class="m-4 m-lg-3 pt-2 pb-0">
+                <form class="container mx-1" name="form2" id="addUser" method=POST action="{% url 'shoppingadd'%}">
+                    {% csrf_token %}
+                    <div class="row my-3">
+                        <div class="col-sm-6">
+                            <div class="row">
+                                <div class="form-floating form-floating-group flex-grow-1 mb-3">
+                                    <h1 class="display-5 fw-bold">Grocery List</h1>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-floating form-floating-group flex-grow-1 mb-3">
+                                    <a href="{% url 'menu' %}" class="btn btn-primary btn-lg px-4 me-sm-3">My Menu</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="row mb-4">
+                                <div class="col-8">
+                                    <div class="form-floating form-floating-group flex-grow-1">
+                                        <input class="form-control" id="item" type="text" name="item" placeholder="placeholder" value=""/>
+                                        <label for="item">Item:</label>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <div class="form-floating form-floating-group flex-grow-1">
+                                        <input class="form-control" id="amount" type="text" name="amount" placeholder="placeholder" value=""/>
+                                        <label for="amount">#:</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Add Button -->
+                                <div class="mb-1 mb-4">
+                                    <button class="btn btn-primary btn-lg px-4 me-sm-3" type="submit">Add Item</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Page Content-->
+<section class="pt-4">
+    <div class="container px-lg-5">
+        <div class="card bg-light border-0 h-100 mb-{% if shopping.count > 0 %}0{% endif %}{% if shopping.count == 0 %}5{% endif %}">
+            <div class="card-body text-left mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+
+                <ul class="list-group list-group-flush bg-transparent">
+                    <li class="list-group-item d-flex bg-transparent">
+                        <div class="col">
+                            <h5>Item</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Amount</h5>
+                        </div>
+                        {% comment %} <div class="col">
+                            <h5>Recipe</h5>
+                        </div> {% endcomment %}
+                        <div class="col-2">
+                        </div>
+                        <div class="col-2">
+                            <a class="btn btn-danger btn-sm"  href="{% url 'grocerydeleteall'%}" >Delete All</a>
+                        </div>
+                    </li>
+
+                    {% for ingredient in grocery %}  
+                        <li class="list-group-item d-flex bg-transparent" id="{{ ingredient.grocery_id }}">
+                            <div class="col">
+                                {{ ingredient.iname }}<br>
+                                For: <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
+                            </div>
+                            <div class="col">
+                                {{ ingredient.measurement }}
+                            </div>
+                            {% comment %} <div class="col">
+                                <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
+                            </div> {% endcomment %}
+                            <div class="col-2">
+                                <a class="btn btn-warning btn-sm" onclick="mark({{ ingredient.grocery_id }})">Mark</a>
+                            </div>
+                            <div class="col-2">
+                                <a class="btn btn-danger btn-sm"  href="{% url 'grocerydelete' itemID=ingredient.grocery_id %}" >Delete</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if shopping.count > 0 %}
+    <section class="pt-4">
+        <div class="container px-lg-5">
+            <div class="card bg-light border-0 h-100 mb-5">
+                <div class="card-body text-left mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                    <ul class="list-group list-group-flush bg-transparent">
+
+                        {% for item in shopping %}  
+                            <li class="list-group-item d-flex bg-transparent" id="999{{ item.shopping_id }}">
+                                <div class="col">
+                                    {{ item.itemname }}
+                                </div>
+                                <div class="col">
+                                    {{ item.quantity }}
+                                {% comment %} </div>
+                                <div class="col"> {% endcomment %}
+                                </div>
+                                <div class="col-2">
+                                    <a class="btn btn-warning btn-sm" onclick="mark(999{{ item.shopping_id }})">Mark</a>
+                                </div>
+                                <div class="col-2">
+                                    <a class="btn btn-danger btn-sm"  href="{% url 'shoppingdelete' itemID=item.shopping_id %}" >Delete</a>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+{% endblock %}

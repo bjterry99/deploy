@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titleblock %}Home{% endblock %}
+{% block mainblock %}
+
+<!-- Header-->
+<header class="py-5">
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+            <div class="m-4 m-lg-3">
+                <h1 class="display-5 fw-bold">Our Recipe Webapp!</h1>
+
+                <p class="fs-4">Filter recipes with the options below</p>
+
+                <!-- Search -->
+                <form class="container mx-1" name="form" method=POST action="{% url 'recipesearch'%}">
+                    {% csrf_token %}
+                    <div class="row my-3">
+
+                        <!-- Name -->
+                        <div class="col-sm-6">
+                            <div class="form-floating form-floating-group flex-grow-1">
+                                <input class="form-control mb-3" id="name_contains" type="text" name="name_contains" placeholder="placeholder" value="{{name}}"/>
+                                <label for="name_contains">Name:</label>
+                            </div>
+                        </div>
+
+                        <!-- Ingredient -->
+                        <div class="col-sm-6">
+                            <div class="form-floating">
+                                <input class="form-control" list="ingredient_list" id="ingredient" name="ingredient" value="{{ ingredient}}"  placeholder="Type to search...">
+                                <datalist id="ingredient_list">
+                                    {% for i in ingredients %}
+                                        <option value="{{ i.iname }}">{{ i.iname }}</option>
+                                    {% endfor %}
+                                </datalist>
+                                <label for="ingredient" class="form-label">Ingredient:</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-sm-6">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-floating">
+                                <input class="form-control" list="ingredient_list" id="ingredient" name="ingredient2" value="{{ ingredient2}}"  placeholder="Type to search...">
+                                <datalist id="ingredient_list">
+                                    {% for i in ingredients %}
+                                        <option value="{{ i.iname }}">{{ i.iname }}</option>
+                                    {% endfor %}
+                                </datalist>
+                                <label for="ingredient" class="form-label">Ingredient:</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-sm-6">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-floating">
+                                <input class="form-control" list="ingredient_list" id="ingredient" name="ingredient3" value="{{ ingredient3}}" placeholder="Type to search...">
+                                <datalist id="ingredient_list">
+                                    {% for i in ingredients %}
+                                        <option value="{{ i.iname }}">{{ i.iname }}</option>
+                                    {% endfor %}
+                                </datalist>
+                                <label for="ingredient" class="form-label">Ingredient:</label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-sm-6">
+                            <!-- Search Button -->
+                            <div class="mb-2">
+                                <a href="{% url 'index' %}" class="btn btn-primary btn-lg px-4 me-sm-3">Load all Recipes</a>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <!-- Search Button -->
+                            <div class="mb-2">
+                                <button class="btn btn-warning btn-lg px-4 me-sm-3" type="submit">Filter Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Page Content-->
+<!-- main-->
+{% if main %}
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+            <div class="m-4 ">
+                <h1 class="fw-bold">Main Dishes</h1>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<section class="pt-4">
+    <div class="container px-lg-5">
+        
+        <div class="row gx-lg-5">
+
+            {% for recipe in main %}  
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
+                            <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
+
+                            {% if recipe in menu %}
+                                <form name="formMaind" method=POST action="{% url 'menuitemdeletehome' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-danger btn-lg m-1" type="submit">Remove from Menu</button>
+                                </form>
+                            {% endif %}
+                            {% if  recipe not in menu %}
+                                <form name="formMaina" method=POST action="{% url 'menuitemadd' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-primary btn-lg m-1" type="submit">Add to Menu</button>
+                                </form>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        
+
+            {% if egg == 1 %}
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                            <img class="rounded" src="{% static 'img/aandb.jpg' %}" width='300'>
+                            <h2 class="fs-4 fw-bold">I love you Abbey</h2>
+                            <p id="love">quote here</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+</section>
+
+<!-- side-->
+{% if side %}
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+            <div class="m-4 ">
+                <h1 class="fw-bold">Side Dishes</h1>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<section class="pt-4">
+    <div class="container px-lg-5">
+        
+        <div class="row gx-lg-5">
+
+            {% for recipe in side %}  
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
+                            <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
+                            
+                            {% if recipe in menu %}
+                                <form name="formSided" method=POST action="{% url 'menuitemdeletehome' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-danger btn-lg m-1" type="submit">Remove from Menu</button>
+                                </form>
+                            {% endif %}
+                            {% if  recipe not in menu %}
+                                <form name="formSidea" method=POST action="{% url 'menuitemadd' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-primary btn-lg m-1" type="submit">Add to Menu</button>
+                                </form>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+<!-- dessert-->
+{% if dessert %}
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+            <div class="m-4 ">
+                <h1 class="fw-bold">Desserts</h1>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<section class="pt-4">
+    <div class="container px-lg-5">
+        
+        <div class="row gx-lg-5">
+
+            {% for recipe in dessert %}  
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
+                            <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
+                            
+                            {% if recipe in menu %}
+                                <form name="formSided" method=POST action="{% url 'menuitemdeletehome' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-danger btn-lg m-1" type="submit">Remove from Menu</button>
+                                </form>
+                            {% endif %}
+                            {% if  recipe not in menu %}
+                                <form name="formSidea" method=POST action="{% url 'menuitemadd' recipeID=recipe.recipe_id%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" id="name_contains_2" name="name_contains_2" placeholder="placeholder" value="{{name}}"/>
+                                    <input type="hidden" id="ingredient_2" name="ingredient_2" placeholder="placeholder" value="{{ingredient}}"/>
+                                    <input type="hidden" id="ingredient2_2" name="ingredient2_2" placeholder="placeholder" value="{{ingredient2}}"/>
+                                    <input type="hidden" id="ingredient3_2" name="ingredient3_2" placeholder="placeholder" value="{{ingredient3}}"/>
+                                    <button class="btn btn-primary btn-lg m-1" type="submit">Add to Menu</button>
+                                </form>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

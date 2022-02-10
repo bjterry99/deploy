@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block titleblock %}Menu{% endblock %}
+{% block mainblock %}
+
+<!-- Header-->
+<header class="py-5">
+    <div class="container px-lg-5">
+        <div class="p-4 p-lg-1 bg-light rounded-3 text-center">
+            <div class="m-4 m-lg-3">
+                <h1 class="display-5 fw-bold">My Menu</h1>
+
+                <div class="btn-group">
+                    <div>
+                        <a href="{% url 'grocery' %}" class="btn btn-primary btn-lg m-1">Grocery List</a>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'menudelete' %}" class="btn btn-danger btn-lg m-1">Clear Menu</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Page Content-->
+<section class="pt-4">
+    <div class="container px-lg-5">
+        
+        <div class="row gx-lg-5">
+
+            {% for recipe in menu %}  
+                <div class="col-lg-6 col-xxl-4 mb-5">
+                    <div class="card bg-light border-0 h-100">
+                        <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                            <img src='{{ recipe.image.url }}' class="rounded" width='300'>
+                            <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
+                            <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
+                            <a class="btn btn-danger btn-lg m-1"  href="{% url 'menuitemdelete' menuID=recipe.menu_id recipeID=recipe.recipe_id %}" >Remove from Menu</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
