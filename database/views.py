@@ -663,7 +663,8 @@ def menuItemAddView(request, recipeID) :
 
 def menuItemAddRecipeView(request, recipeID) :
     list = []
-    for item in menu.objects.all() :
+    menu_data = menu.objects.all()
+    for item in menu_data :
         list.append(item.recipeid)
 
     if recipeID in list :
