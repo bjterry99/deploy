@@ -26,7 +26,8 @@ def indexPageView(request) :
         "menu" : list
     }
 
-    return render(request, 'database/index.html', context)
+    # return render(request, 'database/index.html', context)
+    return redirect('../index')
 
 def recipeSearchPageView(request) :
     if request.method == 'POST':
