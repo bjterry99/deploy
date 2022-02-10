@@ -295,24 +295,15 @@ def menuDeleteAllView(request) :
     return redirect('../menu/')
 
 def menuItemDeleteView(request, menuID, recipeID) :
-    item = menu.objects.get(menu_id = menuID)
-    item.delete()
-
-    ri_data = recipe_ingredients.objects.filter(recipeid_id=recipeID)
-    grocery_data = grocery.objects.all()
     list = []
-    for item in ri_data :
-        list.append(item.ri_id)
+    for item in menu.objects.all() :
+        list.append(item.recipeid)
 
-    for item in grocery_data :
-        if item.iid_id in list :
-            item.delete()
+    if recipeID not in list :
+        return redirect('../../menu/')
 
-    return redirect('../../menu/')
-
-def menuItemDeleteHomeView(request, recipeID) :
-    if request.method == 'POST' :
-        item = menu.objects.get(recipeid_id = recipeID)
+    else :
+        item = menu.objects.get(menu_id = menuID)
         item.delete()
 
         ri_data = recipe_ingredients.objects.filter(recipeid_id=recipeID)
@@ -325,146 +316,171 @@ def menuItemDeleteHomeView(request, recipeID) :
             if item.iid_id in list :
                 item.delete()
 
-        menu_data = menu.objects.all()
+        return redirect('../../menu/')
 
-        ingredient_data = ingredients.objects.all()
-        data = recipes.objects.all()
+def menuItemDeleteHomeView(request, recipeID) :
+    list = []
+    for item in menu.objects.all() :
+        list.append(item.recipeid)
 
-        ingredient = request.POST['ingredient_2']
-        ingredient2 = request.POST['ingredient2_2']
-        ingredient3 = request.POST['ingredient3_2']
-        name_contains = request.POST['name_contains_2']
-        egg = 0
-
-        if name_contains != '' :
-            data = data.filter(recipename__icontains=name_contains)
-
-        # first field only
-        if (ingredient != '') & (ingredient2 == '') & (ingredient3 == '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
-            i_sql += ingredient + "'"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)
-
-        # second only
-        if (ingredient == '') & (ingredient2 != '') & (ingredient3 == '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
-            i_sql += ingredient2 + "'"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)
-
-        # third only
-        if (ingredient == '') & (ingredient2 == '') & (ingredient3 != '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
-            i_sql += ingredient3 + "'"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)
-
-        # one and two
-        if (ingredient != '') & (ingredient2 != '') & (ingredient3 == '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
-            i_sql += ingredient + "', '"
-            i_sql += ingredient2 + "') group by r.recipe_id having count(*) = 2"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)   
-
-        # one and three
-        if (ingredient != '') & (ingredient2 == '') & (ingredient3 != '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
-            i_sql += ingredient + "', '"
-            i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 2"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list) 
-
-        # two and three
-        if (ingredient == '') & (ingredient2 != '') & (ingredient3 != '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
-            i_sql += ingredient2 + "', '"
-            i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 2"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)
-
-        # all three
-        if (ingredient != '') & (ingredient2 != '') & (ingredient3 != '') :
-            i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
-            i_sql += ingredient + "', '"
-            i_sql += ingredient2 + "', '"
-            i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 3"
-
-            i_recipe = recipes.objects.raw(i_sql)
-            list = []
-
-            for id in i_recipe :
-                list.append(id.recipe_id)
-
-            data = data.filter(recipe_id__in=list)     
-
-        #easter egg
-        if (name_contains == "Abbey") or (name_contains== "abbey") :
-            egg = 1
-
-        data = data.order_by('recipename')
-        main_data = data.filter(rclassid=1)
-        side_data = data.filter(rclassid=4)
-        dessert_data = data.filter(rclassid=5)
-
-        list = []
-        for recipe in menu_data :
-            list.append(recipe.recipeid)
-
-        context = {
-            "main" : main_data,
-            "side" : side_data,
-            "dessert" : dessert_data,
-            "ingredients" : ingredient_data,
-            "ingredient" : ingredient,
-            "ingredient3" : ingredient3,
-            "ingredient2" : ingredient2,
-            "name" : name_contains,
-            "egg" : egg,
-            "menu":list
-        }
-
-        return render(request, 'database/index.html', context)
-
-    else :
+    if recipeID not in list :
         return redirect('../')
+
+    else:
+        if request.method == 'POST' :
+            item = menu.objects.get(recipeid_id = recipeID)
+            item.delete()
+
+            ri_data = recipe_ingredients.objects.filter(recipeid_id=recipeID)
+            grocery_data = grocery.objects.all()
+            list = []
+            for item in ri_data :
+                list.append(item.ri_id)
+
+            for item in grocery_data :
+                if item.iid_id in list :
+                    item.delete()
+
+            menu_data = menu.objects.all()
+
+            ingredient_data = ingredients.objects.all()
+            data = recipes.objects.all()
+
+            ingredient = request.POST['ingredient_2']
+            ingredient2 = request.POST['ingredient2_2']
+            ingredient3 = request.POST['ingredient3_2']
+            name_contains = request.POST['name_contains_2']
+            egg = 0
+
+            if name_contains != '' :
+                data = data.filter(recipename__icontains=name_contains)
+
+            # first field only
+            if (ingredient != '') & (ingredient2 == '') & (ingredient3 == '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
+                i_sql += ingredient + "'"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)
+
+            # second only
+            if (ingredient == '') & (ingredient2 != '') & (ingredient3 == '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
+                i_sql += ingredient2 + "'"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)
+
+            # third only
+            if (ingredient == '') & (ingredient2 == '') & (ingredient3 != '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname = '"
+                i_sql += ingredient3 + "'"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)
+
+            # one and two
+            if (ingredient != '') & (ingredient2 != '') & (ingredient3 == '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
+                i_sql += ingredient + "', '"
+                i_sql += ingredient2 + "') group by r.recipe_id having count(*) = 2"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)   
+
+            # one and three
+            if (ingredient != '') & (ingredient2 == '') & (ingredient3 != '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
+                i_sql += ingredient + "', '"
+                i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 2"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list) 
+
+            # two and three
+            if (ingredient == '') & (ingredient2 != '') & (ingredient3 != '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
+                i_sql += ingredient2 + "', '"
+                i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 2"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)
+
+            # all three
+            if (ingredient != '') & (ingredient2 != '') & (ingredient3 != '') :
+                i_sql = "select r.recipe_id from recipes r, recipe_ingredients ri, ingredients i where ri.recipeid_id = r.recipe_id and ri.iid_id = i.i_id and i.iname in ('"
+                i_sql += ingredient + "', '"
+                i_sql += ingredient2 + "', '"
+                i_sql += ingredient3 + "') group by r.recipe_id having count(*) = 3"
+
+                i_recipe = recipes.objects.raw(i_sql)
+                list = []
+
+                for id in i_recipe :
+                    list.append(id.recipe_id)
+
+                data = data.filter(recipe_id__in=list)     
+
+            #easter egg
+            if (name_contains == "Abbey") or (name_contains== "abbey") :
+                egg = 1
+
+            data = data.order_by('recipename')
+            main_data = data.filter(rclassid=1)
+            side_data = data.filter(rclassid=4)
+            dessert_data = data.filter(rclassid=5)
+
+            list = []
+            for recipe in menu_data :
+                list.append(recipe.recipeid)
+
+            context = {
+                "main" : main_data,
+                "side" : side_data,
+                "dessert" : dessert_data,
+                "ingredients" : ingredient_data,
+                "ingredient" : ingredient,
+                "ingredient3" : ingredient3,
+                "ingredient2" : ingredient2,
+                "name" : name_contains,
+                "egg" : egg,
+                "menu":list
+            }
+
+            return render(request, 'database/index.html', context)
+
+        else :
+            return redirect('../')
 
 def menuItemDeleteRecipeView(request, recipeID) :
     item = menu.objects.get(recipeid_id = recipeID)
