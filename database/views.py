@@ -6,36 +6,9 @@ def indexPageView(request) :
     ingredient_data = ingredients.objects.all()
     menu_data = menu.objects.all()
 
-    mainq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 1 order by r.recipename"
-    sideq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 4 order by r.recipename"
-    dessertq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 5 order by r.recipename"
-
-    main_data = recipes.objects.raw(mainq)
-    side_data = recipes.objects.raw(sideq)
-    dessert_data = recipes.objects.raw(dessertq)
-
-    list = []
-    for recipe in menu_data :
-        list.append(recipe.recipeid)
-
-    context = {
-        "main" : main_data,
-        "side" : side_data,
-        "dessert" : dessert_data,
-        "ingredients" : ingredient_data,
-        "menu" : list
-    }
-
-    # return render(request, 'database/index.html', context)
-    return redirect('../home')
-
-def homePageView(request) :
-    ingredient_data = ingredients.objects.all()
-    menu_data = menu.objects.all()
-
-    mainq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 1 order by r.recipename"
-    sideq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 4 order by r.recipename"
-    dessertq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 5 order by r.recipename"
+    mainq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 4 order by r.recipename"
+    sideq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 5 order by r.recipename"
+    dessertq = "select r.recipe_id, r.recipename, r.image from recipes r, recipeclasses rc where rc.rc_id = r.rclassid_id and rc.rc_id = 6 order by r.recipename"
 
     main_data = recipes.objects.raw(mainq)
     side_data = recipes.objects.raw(sideq)
@@ -54,7 +27,6 @@ def homePageView(request) :
     }
 
     return render(request, 'database/index.html', context)
-    # return redirect('/index')
 
 def recipeSearchPageView(request) :
     if request.method == 'POST':
@@ -173,9 +145,9 @@ def recipeSearchPageView(request) :
             egg = 1
 
         data = data.order_by('recipename')
-        main_data = data.filter(rclassid=1)
-        side_data = data.filter(rclassid=4)
-        dessert_data = data.filter(rclassid=5)
+        main_data = data.filter(rclassid=4)
+        side_data = data.filter(rclassid=5)
+        dessert_data = data.filter(rclassid=6)
 
         list = []
         for recipe in menu_data :
@@ -456,9 +428,9 @@ def menuItemDeleteHomeView(request, recipeID) :
                 egg = 1
 
             data = data.order_by('recipename')
-            main_data = data.filter(rclassid=1)
-            side_data = data.filter(rclassid=4)
-            dessert_data = data.filter(rclassid=5)
+            main_data = data.filter(rclassid=4)
+            side_data = data.filter(rclassid=5)
+            dessert_data = data.filter(rclassid=6)
 
             list = []
             for recipe in menu_data :
@@ -635,9 +607,9 @@ def menuItemAddView(request, recipeID) :
                 egg = 1
 
             data = data.order_by('recipename')
-            main_data = data.filter(rclassid=1)
-            side_data = data.filter(rclassid=4)
-            dessert_data = data.filter(rclassid=5)
+            main_data = data.filter(rclassid=4)
+            side_data = data.filter(rclassid=5)
+            dessert_data = data.filter(rclassid=6)
 
             list = []
             for recipe in menu_data :
