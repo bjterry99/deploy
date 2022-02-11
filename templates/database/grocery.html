@@ -155,3 +155,15 @@
     }
 </script>
 {% endblock %}
+
+{% block jsblock %}
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo({top: scrollpos,left: 0,behavior: 'instant'});
+    });
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+</script>
+{% endblock %}
