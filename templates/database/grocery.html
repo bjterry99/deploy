@@ -153,11 +153,7 @@
             document.getElementById(id).className = document.getElementById(id).className.replace( /(?:^|\s)bg-transparent(?!\S)/g , '' )
         }
     }
-</script>
-{% endblock %}
 
-{% block jsblock %}
-<script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         var scrollpos = localStorage.getItem('scrollpos');
         if (scrollpos) window.scrollTo({top: scrollpos,left: 0,behavior: 'instant'});
