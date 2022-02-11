@@ -117,7 +117,9 @@
                 <div class="col-lg-6 col-xxl-4 mb-5">
                     <div class="card bg-light border-0 h-100">
                         <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
-                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                                <img class="rounded" src='{{ recipe.image.url }}' style='height: 75%; width: 75%'>
+                            </div>
                             <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
                             <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
 
@@ -183,7 +185,9 @@
                 <div class="col-lg-6 col-xxl-4 mb-5">
                     <div class="card bg-light border-0 h-100">
                         <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
-                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                                <img class="rounded" src='{{ recipe.image.url }}' style='height: 75%; width: 75%'>
+                            </div>
                             <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
                             <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
                             
@@ -236,7 +240,9 @@
                 <div class="col-lg-6 col-xxl-4 mb-5">
                     <div class="card bg-light border-0 h-100">
                         <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
-                            <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                            <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                                <img class="rounded" src='{{ recipe.image.url }}' style='height: 75%; width: 75%'>
+                            </div>
                             <h2 class="fs-4 fw-bold">{{ recipe.recipename }}</h2>
                             <a class="btn btn-primary btn-lg m-1"  href="{% url 'recipedisplay' recipeID=recipe.recipe_id %}" >View Recipe</a>
                             
@@ -269,4 +275,25 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block jsblock %}
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        var scrollpos = localStorage.getItem('scrollpos');
+        if (scrollpos) window.scrollTo({top: scrollpos,left: 0,behavior: 'instant'});
+    });
+    window.onbeforeunload = function(e) {
+        localStorage.setItem('scrollpos', window.scrollY);
+    };
+
+    function quote() {
+        const list = ["My one and only", "My sweetheart", "Love of my life", "My Abigail", "Honey bunny", "My honey bunches of oats", "You are mine"]
+
+        const random = Math.floor(Math.random() * list.length);
+        console.log(random, list[random]);
+        
+        document.getElementById("love").innerHTML = list[random];
+    }
+</script>
 {% endblock %}

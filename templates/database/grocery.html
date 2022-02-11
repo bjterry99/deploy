@@ -140,3 +140,18 @@
 {% endif %}
 
 {% endblock %}
+
+{% block jsblock %}
+<script>
+    function mark(id) {
+        if (document.getElementById(id).className == ("list-group-item d-flex list-group-item-secondary")) {
+            document.getElementById(id).className += " bg-transparent";
+            document.getElementById(id).className = document.getElementById(id).className.replace( /(?:^|\s)list-group-item-secondary(?!\S)/g , '' );
+        }
+        else {
+            document.getElementById(id).className += " list-group-item-secondary";
+            document.getElementById(id).className = document.getElementById(id).className.replace( /(?:^|\s)bg-transparent(?!\S)/g , '' )
+        }
+    }
+</script>
+{% endblock %}

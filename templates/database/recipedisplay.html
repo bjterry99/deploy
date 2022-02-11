@@ -9,8 +9,10 @@
         <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
             <div class="m-4 m-lg-5">
 
-                <h1 class="display-5 fw-bold">{{ recipe.recipename }}</h1>
-                <img class="rounded" src='{{ recipe.image.url }}' width='300'>
+                <div class="card-body text-center mt-4 p-0 p-lg-4 pt-0 pt-lg-0">
+                    <h1 class="display-5 fw-bold">{{ recipe.recipename }}</h1>
+                    <img class="rounded" src='{{ recipe.image.url }}' style='height: 100%; width: 100%'>
+                </div>
 
                 <br>
                 <br>
