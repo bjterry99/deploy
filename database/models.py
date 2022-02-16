@@ -105,7 +105,8 @@ class menu(models.Model) :
 class grocery(models.Model) :
     grocery_id = models.AutoField(primary_key=True)
     iid = models.ForeignKey(recipe_ingredients, blank=True, default = "", verbose_name="Ingredient ID", related_name = 'iID', on_delete=models.DO_NOTHING, to_field='ri_id')
-
+    mark = models.BooleanField(default=False)
+    
     class Meta:
         db_table = 'grocery'
 
@@ -116,6 +117,7 @@ class shopping(models.Model) :
     shopping_id = models.AutoField(primary_key=True)
     itemname = models.CharField(max_length=100, default="default", verbose_name="Item Name")
     quantity = models.CharField(max_length=20, blank=True)
+    mark = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'shopping'

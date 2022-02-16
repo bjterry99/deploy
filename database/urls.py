@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import indexPageView, recipeDisplayPageView, recipeSearchPageView, menuPageView, groceryPageView, shoppingAddView, menuItemAddView, menuItemAddRecipeView
 from .views import shoppingDeleteView, groceryDeleteView, groceryDeleteAllView, menuDeleteAllView, menuItemDeleteView, menuItemDeleteHomeView, menuItemDeleteRecipeView
+from .views import shoppingMarkView, groceryMarkView
 
 urlpatterns = [
     path("recipedisplay/<recipeID>", recipeDisplayPageView, name="recipedisplay"),
@@ -17,5 +18,7 @@ urlpatterns = [
     path("menuitemdeleterecipe/<recipeID>", menuItemDeleteRecipeView, name="menuitemdeleterecipe"),
     path("menuitemadd/<recipeID>", menuItemAddView, name="menuitemadd"),
     path("menuitemaddrecipe/<recipeID>", menuItemAddRecipeView, name="menuitemaddrecipe"),
+    path("shoppingmark/<itemID>", shoppingMarkView, name="shoppingmark"),
+    path("grocerymark/<itemID>", groceryMarkView, name="grocerymark"),
     path("", indexPageView, name="index")
 ]

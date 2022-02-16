@@ -81,7 +81,12 @@
                     </li>
 
                     {% for ingredient in grocery %}  
-                        <li class="list-group-item d-flex bg-transparent" id="{{ ingredient.grocery_id }}">
+                        {% if ingredient.mark == True %}
+                            <li class="list-group-item d-flex list-group-item-secondary">
+                        {% endif %}
+                        {% if ingredient.mark == False %}
+                            <li class="list-group-item d-flex bg-transparent">
+                        {% endif %}
                             <div class="col">
                                 {{ ingredient.iname }}<br>
                                 For: <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
@@ -93,7 +98,7 @@
                                 <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
                             </div> {% endcomment %}
                             <div class="col-2">
-                                <a class="btn btn-warning btn-sm" onclick="mark({{ ingredient.grocery_id }})">Mark</a>
+                                <a class="btn btn-warning btn-sm" href="{% url 'grocerymark' itemID=ingredient.grocery_id %}">Mark</a>
                             </div>
                             <div class="col-2">
                                 <a class="btn btn-danger btn-sm"  href="{% url 'grocerydelete' itemID=ingredient.grocery_id %}" >Delete</a>
@@ -115,7 +120,12 @@
                     <ul class="list-group list-group-flush bg-transparent">
 
                         {% for item in shopping %}  
-                            <li class="list-group-item d-flex bg-transparent" id="999{{ item.shopping_id }}">
+                            {% if item.mark == True %}
+                                <li class="list-group-item d-flex list-group-item-secondary">
+                            {% endif %}
+                            {% if item.mark == False %}
+                                <li class="list-group-item d-flex bg-transparent">
+                            {% endif %}
                                 <div class="col">
                                     {{ item.itemname }}
                                 </div>
@@ -125,7 +135,7 @@
                                 <div class="col"> {% endcomment %}
                                 </div>
                                 <div class="col-2">
-                                    <a class="btn btn-warning btn-sm" onclick="mark(999{{ item.shopping_id }})">Mark</a>
+                                    <a class="btn btn-warning btn-sm" href="{% url 'shoppingmark' itemID=item.shopping_id %}">Mark</a>
                                 </div>
                                 <div class="col-2">
                                     <a class="btn btn-danger btn-sm"  href="{% url 'shoppingdelete' itemID=item.shopping_id %}" >Delete</a>
@@ -143,17 +153,6 @@
 
 {% block jsblock %}
 <script>
-    function mark(id) {
-        if (document.getElementById(id).className == ("list-group-item d-flex list-group-item-secondary")) {
-            document.getElementById(id).className += " bg-transparent";
-            document.getElementById(id).className = document.getElementById(id).className.replace( /(?:^|\s)list-group-item-secondary(?!\S)/g , '' );
-        }
-        else {
-            document.getElementById(id).className += " list-group-item-secondary";
-            document.getElementById(id).className = document.getElementById(id).className.replace( /(?:^|\s)bg-transparent(?!\S)/g , '' )
-        }
-    }
-
     document.addEventListener("DOMContentLoaded", function(event) { 
         var scrollpos = localStorage.getItem('scrollpos');
         if (scrollpos) window.scrollTo({top: scrollpos,left: 0,behavior: 'instant'});

@@ -648,3 +648,25 @@ def menuItemAddRecipeView(request, recipeID) :
 
     url = '../../recipedisplay/' + recipeID
     return redirect(url)
+
+def shoppingMarkView(request, itemID) :
+    shoppingItem = shopping.objects.get(shopping_id = itemID)
+
+    if shoppingItem.mark == False :
+        shoppingItem.mark = True
+    else :
+        shoppingItem.mark = False
+        
+    shoppingItem.save()
+    return redirect('../grocery/')
+
+def groceryMarkView(request, itemID) :
+    shoppingItem = grocery.objects.get(grocery_id = itemID)
+
+    if shoppingItem.mark == False :
+        shoppingItem.mark = True
+    else :
+        shoppingItem.mark = False
+        
+    shoppingItem.save()
+    return redirect('../grocery/')
