@@ -27,19 +27,19 @@
 
                         <div class="col-sm-6">
                             <div class="row mb-4">
-                                <div class="col-8">
+                                <div class="col">
                                     <div class="form-floating form-floating-group flex-grow-1">
                                         <input class="form-control" id="item" type="text" name="item" maxlength="100" placeholder="placeholder" value=""/>
                                         <label for="item">Item:</label>
                                     </div>
                                 </div>
 
-                                <div class="col">
+                                {% comment %} <div class="col">
                                     <div class="form-floating form-floating-group flex-grow-1">
                                         <input class="form-control" id="amount" type="text" name="amount" placeholder="placeholder" value=""/>
                                         <label for="amount">#:</label>
                                     </div>
-                                </div>
+                                </div> {% endcomment %}
                             </div>
 
                             <div class="row">
@@ -64,44 +64,40 @@
 
                 <ul class="list-group list-group-flush bg-transparent">
                     <li class="list-group-item d-flex bg-transparent">
-                        <div class="col">
-                            <h5>Item</h5>
-                        </div>
-                        <div class="col">
-                            <h5>Amount</h5>
-                        </div>
-                        {% comment %} <div class="col">
-                            <h5>Recipe</h5>
-                        </div> {% endcomment %}
-                        <div class="col-2">
-                        </div>
-                        <div class="col-2">
-                            <a class="btn btn-danger btn-sm"  href="{% url 'grocerydeleteall'%}" >Delete All</a>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Item</h5>
+                                </div>
+                                <div class="col">
+                                    <h5>Amount</h5>
+                                </div>
+                                <div class="col d-flex flex-row-reverse">
+                                    <a class="btn btn-danger btn-sm"  href="{% url 'grocerydeleteall'%}" >Delete All</a>
+                                </div>
+                            </div>
                         </div>
                     </li>
 
                     {% for ingredient in grocery %}  
-                        {% if ingredient.mark == True %}
-                            <li class="list-group-item d-flex list-group-item-secondary">
-                        {% endif %}
-                        {% if ingredient.mark == False %}
-                            <li class="list-group-item d-flex bg-transparent">
-                        {% endif %}
-                            <div class="col">
-                                {{ ingredient.iname }}<br>
-                                For: <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
-                            </div>
-                            <div class="col">
-                                {{ ingredient.measurement }}
-                            </div>
-                            {% comment %} <div class="col">
-                                <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
-                            </div> {% endcomment %}
-                            <div class="col-2">
-                                <a class="btn btn-warning btn-sm" href="{% url 'grocerymark' itemID=ingredient.grocery_id %}">Mark</a>
-                            </div>
-                            <div class="col-2">
-                                <a class="btn btn-danger btn-sm"  href="{% url 'grocerydelete' itemID=ingredient.grocery_id %}" >Delete</a>
+                        {% if ingredient.mark == True %} <li class="list-group-item d-flex list-group-item-secondary"> {% endif %}
+                        {% if ingredient.mark == False %} <li class="list-group-item d-flex bg-transparent"> {% endif %}
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        {{ ingredient.iname }}<br>
+                                    </div>
+                                    <div class="col">
+                                        {{ ingredient.measurement }}
+                                    </div>
+                                    <div class="col d-flex flex-row-reverse">
+                                        <a class="btn btn-danger btn-sm"  href="{% url 'grocerydelete' itemID=ingredient.grocery_id %}" >Delete</a>
+                                        <a class="btn btn-warning btn-sm" href="{% url 'grocerymark' itemID=ingredient.grocery_id %}">Mark</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <a href="{% url 'recipedisplay' recipeID=ingredient.recipe_id %}">{{ ingredient.recipename }}</a>
+                                </div>
                             </div>
                         </li>
                     {% endfor %}
@@ -120,25 +116,18 @@
                     <ul class="list-group list-group-flush bg-transparent">
 
                         {% for item in shopping %}  
-                            {% if item.mark == True %}
-                                <li class="list-group-item d-flex list-group-item-secondary">
-                            {% endif %}
-                            {% if item.mark == False %}
-                                <li class="list-group-item d-flex bg-transparent">
-                            {% endif %}
-                                <div class="col">
-                                    {{ item.itemname }}
-                                </div>
-                                <div class="col">
-                                    {{ item.quantity }}
-                                {% comment %} </div>
-                                <div class="col"> {% endcomment %}
-                                </div>
-                                <div class="col-2">
-                                    <a class="btn btn-warning btn-sm" href="{% url 'shoppingmark' itemID=item.shopping_id %}">Mark</a>
-                                </div>
-                                <div class="col-2">
-                                    <a class="btn btn-danger btn-sm"  href="{% url 'shoppingdelete' itemID=item.shopping_id %}" >Delete</a>
+                            {% if item.mark == True %} <li class="list-group-item d-flex list-group-item-secondary"> {% endif %}
+                            {% if item.mark == False %} <li class="list-group-item d-flex bg-transparent"> {% endif %}
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ item.itemname }}
+                                        </div>
+                                        <div class="col d-flex flex-row-reverse">
+                                            <a class="btn btn-danger btn-sm"  href="{% url 'shoppingdelete' itemID=item.shopping_id %}" >Delete</a>
+                                            <a class="btn btn-warning btn-sm" href="{% url 'shoppingmark' itemID=item.shopping_id %}">Mark</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
                         {% endfor %}

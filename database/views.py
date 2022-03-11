@@ -231,7 +231,7 @@ def shoppingAddView(request) :
         new_item = shopping()
 
         new_item.itemname = request.POST.get('item')
-        new_item.quantity = request.POST.get('amount')
+        # new_item.quantity = request.POST.get('amount')
 
         if request.POST.get('item') != '' :
             new_item.save()
